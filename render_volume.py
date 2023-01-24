@@ -23,15 +23,18 @@ class Runner:
 
         # Configuration
         self.conf_path = conf_path
+        #print("conf is", self.conf_path)
         f = open(self.conf_path)
         conf_text = f.read()
         conf_text = conf_text.replace("CASE_NAME", case)
         f.close()
 
         self.conf = ConfigFactory.parse_string(conf_text)
+        #print("conf is" ,type(self.conf), self.conf)
         self.conf["dataset.data_dir"] = self.conf["dataset.data_dir"].replace("CASE_NAME", case)
         self.base_exp_dir = self.conf["general.base_exp_dir"]
         os.makedirs(self.base_exp_dir, exist_ok=True)
+        print("conf dataset is ", self.conf["dataset"])
         self.dataset = Dataset(self.conf["dataset"])
         self.iter_step = 0
 
@@ -426,7 +429,7 @@ class Runner:
 
 if __name__ == "__main__":
     print("Hello Wooden")
-
+    # ensure the default tensor is float tensor
     torch.set_default_tensor_type("torch.cuda.FloatTensor")
 
     FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
@@ -443,9 +446,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     torch.cuda.set_device(args.gpu)
+    # initialize runner
     runner = Runner(args.conf, args.mode, args.case, args.is_continue)
 
     if args.mode == "train":
+        # training step
         runner.train()
     elif args.mode == "validate_mesh":
         runner.validate_mesh(world_space=True, resolution=512, threshold=args.mcube_threshold)

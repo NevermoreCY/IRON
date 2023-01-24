@@ -51,7 +51,7 @@ class GGXColocatedRenderer(nn.Module):
         m_eta = 1.48958738
         m_invEta2 = 1.0 / (m_eta * m_eta)
 
-        # clamp alpha for numeric stability
+        # clamp alpha for numeric stability, add lower bound for roughness
         alpha = torch.clamp(alpha, min=0.0001)
 
         # specular term: https://github.com/mitsuba-renderer/mitsuba/blob/cfeb7766e7a1513492451f35dc65b86409655a7b/src/bsdfs/roughplastic.cpp#L347

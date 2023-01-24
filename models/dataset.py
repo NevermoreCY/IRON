@@ -43,6 +43,7 @@ class Dataset:
         self.conf = conf
 
         self.data_dir = conf.get_string("data_dir")
+        print("data dir is ", self.data_dir)
         self.render_cameras_name = conf.get_string("render_cameras_name")
         self.object_cameras_name = conf.get_string("object_cameras_name")
 
